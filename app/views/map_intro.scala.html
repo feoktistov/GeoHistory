@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Traffic layer</title>
+    <title>Geo History</title>
     <style>
       html, body, #map-canvas {
         height: 100%;
@@ -13,17 +13,107 @@
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     <script>
+    
+// This example creates circles on the map, representing
+// populations in the United States.
+
+var myLatlng = new google.maps.LatLng(59.324506, 18.010025);
+// First, create an object containing LatLng and population for each city.
+var citymap = {};
+var circles = new Array();
+var radiuses = [10,20,50];
+citymap['chicago'] = {
+  center: myLatlng,
+  population: 2000
+};
+citymap['newyork'] = {
+  center: myLatlng,
+  population: 5000
+};
+citymap['losangeles'] = {
+  center: myLatlng ,
+  population: 50000
+};
+var cityCircle;
+    
 function initialize() {
-  var myLatlng = new google.maps.LatLng(34.04924594193164, -118.24104309082031);
+	
+  
   var mapOptions = {
-    zoom: 13,
+    zoom: 14,
     center: myLatlng
   }
 
   var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  
+  var bermudaTriangle;
+  
+  var triangleCoords = [
+    new google.maps.LatLng(59.322506, 18.010025),
+    new google.maps.LatLng(59.323506, 18.010025),
+    new google.maps.LatLng(59.322506, 18.020025),
+    new google.maps.LatLng(59.322506, 18.010025)
+  ];
+  
+  // Construct the polygon.
+  bermudaTriangle = new google.maps.Polygon({
+    paths: triangleCoords,
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35
+  });
 
-  var trafficLayer = new google.maps.TrafficLayer();
-  trafficLayer.setMap(map);
+  bermudaTriangle.setMap(map);
+  
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: 'Hello World!'
+  });
+  
+  // Construct the circle for each value in citymap.
+  // Note: We scale the population by a factor of 20.
+  var index = 0
+  
+  var ofsets = [
+    new google.maps.LatLng(0.01, 0.01),
+    new google.maps.LatLng(-0.01, 0.03),
+    new google.maps.LatLng(-0.02, -0.02)
+  ];
+  
+  
+  for (var city in citymap) {
+  	var pos = new google.maps.LatLng( citymap[city].center.lat() + ofsets[index].lat() , citymap[city].center.lng() + ofsets[index].lng() )
+    var populationOptions = {
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map,
+      center: pos,
+      radius: citymap[city].population / 20
+    };
+    // Add the circle for this city to the map.
+    circles[index] = new google.maps.Circle(populationOptions);
+    index ++;
+  }
+  
+  
+  
+  setInterval(function(){
+  	var index = 0;
+  	for(var i=0;i<circles.length;i++) {
+		if(circles[i].getRadius()  < Math.abs(radiuses[i]) || circles[i].getRadius() > Math.abs(radiuses[i]*50)) {
+			radiuses[i] = - radiuses[i];
+		}
+  		circles[i].setRadius( circles[i].getRadius() - radiuses[i] );
+  	}
+  	
+  },50);
+
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
