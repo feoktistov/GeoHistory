@@ -12,7 +12,9 @@ object ApplicationBuild extends Build {
     jdbc,
     anorm,
     "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
-    "org.squeryl" % "squeryl_2.10.0-RC1" % "0.9.5-3"
+    "org.squeryl" % "squeryl_2.10.0-RC1" % "0.9.5-3",
+	"com.google.gdata" % "core" % "1.47.1",
+	"com.google.code.gson" % "gson" % "2.2.4"
   )
 
 
