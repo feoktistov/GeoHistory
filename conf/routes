@@ -4,8 +4,11 @@
 
 # Home page
 GET     /                           controllers.Application.index
-POST     /                          controllers.Application.addDataFileUrl
+#POST     /                          controllers.Application.addDataFileUrl
 GET     /getFiles                           controllers.Application.getFiles
+POST    /upload                           controllers.Application.upload
+GET    /upload                           controllers.Application.showUpload
+GET    /showCsv                           controllers.Application.showContent
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

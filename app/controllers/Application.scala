@@ -8,26 +8,76 @@ import play.api.mvc._
 import play.api.data.Forms.{mapping, text, optional}
 
 import org.squeryl.PrimitiveTypeMode._
-import models.{GeoHistDb, GeoObject}
+import models._
+import com.google.gson.Gson
 
 
 object Application extends Controller {
 
-  val loadFileForm = Form(
-    mapping(
-      "name" -> text
-    )(GeoObject.apply)(GeoObject.unapply)
-  )
+  var files  = List[String]()
 
   def index = Action {
-    Ok(views.html.map_intro(loadFileForm))
+    Ok(views.html.map_intro())
   }
 
-  def addDataFileUrl = Action { implicit request =>
-    loadFileForm.bindFromRequest.value map { obj =>
-      inTransaction(GeoHistDb.geoObjects insert obj)
-      Redirect(routes.Application.index())
-    } getOrElse BadRequest
+  def upl = Action {
+    Ok.sendFile(new java.io.File("/tmp/fileToServe.pdf"))
+  }
+
+  def showUpload = Action {
+    Ok(views.html.upload())
+  }
+
+  def showContent = Action {
+    if(files.isEmpty) {
+      Redirect(routes.Application.index).flashing(
+        "error" -> "No uploaded files"
+      )
+    } else {
+      var data = CSV.fromFile("/tmp/" + files(0))
+      var str = ""
+      data.foreach( s => {
+        str += GeoHistDb.contstructObject(s).getClass
+        str += "\n"
+      } )
+
+      Ok("File uploaded " + str)
+    }
+  }
+
+  def upload = Action(parse.multipartFormData) { request =>
+    request.body.file("picture").map { picture =>
+      import java.io.File
+      val filename = picture.filename
+      files = files :+ filename
+      val contentType = picture.contentType
+      if( contentType.get.contains("csv") ) {
+        picture.ref.moveTo(new File("/tmp/" + filename),true)
+        var data = CSV.fromFile("/tmp/" + filename)
+
+
+        var list = List[GeoObject]()
+
+        data.splitAt(1)._2.foreach( s => {
+          list = list :+ GeoHistDb.contstructObject(s)
+        } )
+
+        val gson = new Gson()
+
+        val result = gson.toJson(list.toArray)
+
+        Ok("File uploaded " + result)
+      } else {
+        Redirect(routes.Application.index).flashing(
+          "error" -> "Wrong file format"
+        )
+      }
+
+    }.getOrElse {
+      Redirect(routes.Application.index).flashing(
+        "error" -> "Missing file"
+      )
+    }
   }
 
   def getFiles = Action {
