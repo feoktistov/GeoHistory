@@ -58,7 +58,7 @@ object Application extends Controller {
     list = list.filter(p => {
       p match {
         case p : GeoValue => {
-          p.value != 0
+          p.value != 0 && p.value > 10000
         }
         case _ => false
       }
