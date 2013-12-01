@@ -7,10 +7,10 @@ function CircleWidget(p) {
     this.set('valueScale', p.hasOwnProperty('valueScale')? p['valueScale'] : 1);
 
     var circle = new google.maps.Circle({
-        strokeWeight: 2,
-        fillColor: "#0000ff"
+        strokeWeight: 1,
+        strokeColor: '#0000ff',
+        fillColor: '#0000ff',
     });
-
     this.bindTo('bounds', circle);
     circle.bindTo('center', this, 'position');
     circle.bindTo('map', this);
@@ -20,10 +20,16 @@ function CircleWidget(p) {
     circle.bindTo('strokeWeight', this);
     circle.bindTo('fillColor', this);
     circle.bindTo('fillOpacity', this);
+
+//    var marker = new google.maps.Marker({
+//    });
+//    marker.bindTo('position', this);
+//    marker.bindTo('map', this);
 }
 CircleWidget.prototype = new google.maps.MVCObject();
 CircleWidget.prototype.value_changed = function() {
-    this.set('radius', this.get('value') * this.get('valueScale'));
+    var radius = Math.min(5000000, Math.max(100, this.get('value') * this.get('valueScale')));
+    this.set('radius', radius);
 };
 
 

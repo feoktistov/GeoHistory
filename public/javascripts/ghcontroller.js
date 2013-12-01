@@ -12,10 +12,15 @@ function initGHView(map) {
             name:name,
             map:map,
             position:pos,
-            valueScale:1,
+            valueScale:10,
         });
         ghWidgets[name] = widget;
 
+        addListenerToObjectForWidget(object, widget);
+    }
+}
+
+function addListenerToObjectForWidget(object, widget) {
         google.maps.event.addListener(object, 'current_changed', function() {
             var item = object.get('current');
             if (item != null) {
@@ -24,13 +29,13 @@ function initGHView(map) {
                 widget.set('position', pos);
             }
         });
-    }
 }
 
 
 function updateGH(deltaTime) {
     var time = ghModel.get('time');
-    time.setYear(time.getYear() + 1);
+    time.setFullYear(time.getFullYear() + 1);
+    console.log("year:" + time.getFullYear());
     if (time > ghModel.get('maxTime')) {
         ghModel.set('time', new Date(ghModel.get('minTime')));
     } else {

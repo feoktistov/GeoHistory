@@ -23,9 +23,6 @@ GHObject.prototype.time_changed = function() {
     }
     this.set('next', next);
     this.set('current', item);
-    if (item != null) {
-        console.log('time_changed' + ' current:' + this.get('current')['value']);
-    }
 };
 
 

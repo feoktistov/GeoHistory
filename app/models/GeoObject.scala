@@ -14,7 +14,7 @@ import collection.immutable.Vector
 class GeoObject extends KeyedEntity[Long] {
   var id : Long = 0L
   var name : String = "Default object"
-  var time : Timestamp = Time.now
+  var time : String = ""
   var filter : String = ""
   var color : String = "#FF0000"
   var userData : String = ""
@@ -32,7 +32,7 @@ class GeoObject extends KeyedEntity[Long] {
     if (!vector(index).isEmpty) lng = vector(index).toDouble
     index += 1
 
-    if (!vector(index).isEmpty) time = Time.fromYes(vector(index).toInt)
+    if (!vector(index).isEmpty) time = Time.fromYears(vector(index).toInt)
     index += 1
 
     if (!vector(index).isEmpty) filter = vector(index)

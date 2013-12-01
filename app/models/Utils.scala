@@ -23,10 +23,11 @@ object Time {
     new Timestamp(date.getTime)
   }
 
-  def fromYes(year : Int) = {
+  def fromYears(year : Int) = {
     val c = Calendar.getInstance()
     c.set(year, 0, 0, 0, 0)
-    new java.sql.Timestamp(c.getTime().getTime)
+    val date = new java.sql.Timestamp(c.getTime().getTime);
+    new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
   }
 
   def before(period: Long) = after(-period)
