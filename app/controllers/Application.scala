@@ -62,7 +62,7 @@ object Application extends Controller {
         }
         case _ => false
       }
-    }).splitAt(50)._1
+    }).splitAt(10)._1
 
     val gson = new Gson()
 
