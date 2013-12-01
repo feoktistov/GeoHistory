@@ -55,12 +55,13 @@ function initialize() {
       map: map,
       title: 'Hello World!'
   });
-  
+
   initGHView(map);
 
   setInterval(function(){
         updateGH(0.03);
-    },30);
+        var time = ghModel.get('time');
+    },500);
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

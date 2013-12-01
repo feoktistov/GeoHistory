@@ -19,7 +19,7 @@ function initGHView(map) {
         google.maps.event.addListener(object, 'current_changed', function() {
             var item = object.get('current');
             if (item != null) {
-                widget.set('value', item['value'] + ghModel.get('time'));
+                widget.set('value', item['value']);
                 var pos = new google.maps.LatLng(item['lat'], item['lng']);
                 widget.set('position', pos);
             }
@@ -29,5 +29,12 @@ function initGHView(map) {
 
 
 function updateGH(deltaTime) {
-    ghModel.set('time', ghModel.get('time') + deltaTime);
+    var time = ghModel.get('time');
+    time.setYear(time.getYear() + 1);
+    if (time > ghModel.get('maxTime')) {
+        ghModel.set('time', new Date(ghModel.get('minTime')));
+    } else {
+        ghModel.set('time', time);
+    }
+    console.log("time: " + time.toGMTString());
 }
