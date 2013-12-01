@@ -10,6 +10,7 @@ POST    /upload                           controllers.Application.upload
 GET    /upload                           controllers.Application.showUpload
 GET    /showCsv                           controllers.Application.showContent
 GET    /mapUI                           controllers.Application.mapUI
+GET    /mapUI/:id                           controllers.Application.mapUIImage(id : Int)
 GET    /startPresentation/:id                   controllers.Application.startPresentation(id : String)
 
 # Map static resources from the /public folder to the /assets URL path

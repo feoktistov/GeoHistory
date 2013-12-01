@@ -73,6 +73,15 @@ object Application extends Controller {
      Ok(views.html.mapUI())
   }
 
+  def mapUIImage(name : Int) = Action{
+    if(name == 1) {
+      Ok(views.html.image1())
+    } else {
+      Ok(views.html.image2())
+    }
+
+  }
+
   def upload = Action(parse.multipartFormData) { request =>
     request.body.file("picture").map { picture =>
       import java.io.File
