@@ -69,6 +69,10 @@ object Application extends Controller {
     gson.toJson(list.toArray)
   }
 
+  def mapUI = Action{
+     Ok(views.html.mapUI())
+  }
+
   def upload = Action(parse.multipartFormData) { request =>
     request.body.file("picture").map { picture =>
       import java.io.File
