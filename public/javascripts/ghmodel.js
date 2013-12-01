@@ -35,7 +35,7 @@ function createDate(dateStr) {
     if (parts[5] === undefined) {
         parts[5] = 0;
     }
-    console.log("createDate from " + dateStr + " to:" + parts[0] + " " + (parts[1] - 1) + " " + parts[2] + " " + parts[3] + " " + parts[4] + " " + parts[5]);
+    //console.log("createDate from " + dateStr + " to:" + parts[0] + " " + (parts[1] - 1) + " " + parts[2] + " " + parts[3] + " " + parts[4] + " " + parts[5]);
     return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]);
 }
 

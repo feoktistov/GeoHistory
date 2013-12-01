@@ -14,6 +14,11 @@ function initGHView(map) {
             position:pos,
             valueScale:1,
         });
+        widget.set('strokeColor', item['color']);
+        widget.set('strokeOpacity', 1);
+        widget.set('strokeWeight', 1);
+        widget.set('fillColor', item['color']);
+        widget.set('fillOpacity', 0.2);
         ghWidgets[name] = widget;
 
         addListenerToObjectForWidget(object, widget);

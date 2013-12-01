@@ -8,8 +8,6 @@ function CircleWidget(p) {
 
     var circle = new google.maps.Circle({
         strokeWeight: 1,
-        strokeColor: '#0000ff',
-        fillColor: '#0000ff',
     });
     this.bindTo('bounds', circle);
     circle.bindTo('center', this, 'position');
