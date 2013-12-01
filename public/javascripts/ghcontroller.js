@@ -12,7 +12,7 @@ function initGHView(map) {
             name:name,
             map:map,
             position:pos,
-            valueScale:10,
+            valueScale:1,
         });
         ghWidgets[name] = widget;
 

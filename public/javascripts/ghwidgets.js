@@ -28,7 +28,7 @@ function CircleWidget(p) {
 }
 CircleWidget.prototype = new google.maps.MVCObject();
 CircleWidget.prototype.value_changed = function() {
-    var radius = Math.min(5000000, Math.max(100, this.get('value') * this.get('valueScale')));
+    var radius = Math.min(2000000, Math.max(100, this.get('value') * this.get('valueScale')));
     this.set('radius', radius);
 };
 
