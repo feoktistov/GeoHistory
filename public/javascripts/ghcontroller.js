@@ -18,9 +18,11 @@ function initGHView(map) {
 
         google.maps.event.addListener(object, 'current_changed', function() {
             var item = object.get('current');
-            widget.set('value', item['value'] + ghModel.get('time'));
-            var pos = new google.maps.LatLng(item['lat'], item['lng']);
-            widget.set('position', pos);
+            if (item != null) {
+                widget.set('value', item['value'] + ghModel.get('time'));
+                var pos = new google.maps.LatLng(item['lat'], item['lng']);
+                widget.set('position', pos);
+            }
         });
     }
 }

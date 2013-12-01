@@ -45,6 +45,30 @@ object Application extends Controller {
     }
   }
 
+  def getJsonFromFile(filename : String) = {
+    val data = CSV.fromFile("/tmp/" + filename)
+
+
+    var list = List[GeoObject]()
+
+    data.splitAt(1)._2.foreach( s => {
+      list = list :+ GeoHistDb.contstructObject(s)
+    } )
+
+    list = list.filter(p => {
+      p match {
+        case p : GeoValue => {
+          p.value != 0
+        }
+        case _ => false
+      }
+    }).splitAt(50)._1
+
+    val gson = new Gson()
+
+    gson.toJson(list.toArray)
+  }
+
   def upload = Action(parse.multipartFormData) { request =>
     request.body.file("picture").map { picture =>
       import java.io.File
@@ -53,20 +77,9 @@ object Application extends Controller {
       val contentType = picture.contentType
       if( contentType.get.contains("csv") ) {
         picture.ref.moveTo(new File("/tmp/" + filename),true)
-        var data = CSV.fromFile("/tmp/" + filename)
 
 
-        var list = List[GeoObject]()
-
-        data.splitAt(1)._2.foreach( s => {
-          list = list :+ GeoHistDb.contstructObject(s)
-        } )
-
-        val gson = new Gson()
-
-        val result = gson.toJson(list.toArray)
-
-        Ok("File uploaded " + result)
+        Ok("File uploaded ")
       } else {
         Redirect(routes.Application.index).flashing(
           "error" -> "Wrong file format"
@@ -78,6 +91,10 @@ object Application extends Controller {
         "error" -> "Missing file"
       )
     }
+  }
+
+  def startPresentation(fileName : String) = Action{
+    Ok(views.html.map(getJsonFromFile(fileName)))
   }
 
   def getFiles = Action {
